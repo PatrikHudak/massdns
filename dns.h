@@ -1465,13 +1465,15 @@ bool dns_in_zone(dns_name_t *name, dns_name_t *zone)
 
 void dns_refused_packet(FILE *f, dns_pkt_t *packet, uint8_t *begin, size_t len, uint8_t *next)
 {
-    if((dns_opcode)packet->header.rcode == DNS_RCODE_REFUSED) {
+    if((dns_opcode)packet->head.header.rcode == DNS_RCODE_REFUSED) {
         // we have refused packet to work with
         fprintf(f,
-            "{\"query_name\":\"%s\",\"query_type\":\"%s\",\"status\":\"REFUSED\",\"resp_name\":\"null\",\"resp_type\":\"null\",\"data\":\"null\"}\n",
-            dns_name2str(&packet.head.question.name),
-            dns_record_type2str((dns_record_type) packet.head.question.type)
+            "{\"query_name\":\"%s\",\"query_type\":\"%s\",\"status\":\"REFUSED\",",
+            dns_name2str(&packet->head.question.name),
+            dns_record_type2str((dns_record_type) packet->head.question.type)
         );
+
+        fprint(f, "\"resp_name\":\"null\",\"resp_type\":\"null\",\"data\":\"null\"}\n");
     }
 }
 
