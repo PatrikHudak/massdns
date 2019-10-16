@@ -999,7 +999,7 @@ void do_read(uint8_t *offset, size_t len, struct sockaddr_storage *recvaddr)
                 for(size_t rec_index = 0; dns_parse_record_raw(offset, next, offset + len, &next, &rec); rec_index++)
                 {
                     fprintf(context.outfile,
-                            "{\"query_name\":\"%s\",\"query_type\":\"%s\",\"status\":\"NOERROR\"",
+                            "{\"query_name\":\"%s\",\"query_type\":\"%s\",\"status\":\"NOERROR\",",
                             dns_name2str(&packet.head.question.name),
                             dns_record_type2str((dns_record_type) packet.head.question.type));
 

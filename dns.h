@@ -1473,7 +1473,7 @@ void dns_refused_packet(FILE *f, dns_pkt_t *packet, uint8_t *begin, size_t len, 
             dns_record_type2str((dns_record_type) packet->head.question.type)
         );
 
-        fprint(f, "\"resp_name\":\"null\",\"resp_type\":\"null\",\"data\":\"null\"}\n");
+        fprintf(f, "\"resp_name\":\"null\",\"resp_type\":\"null\",\"data\":\"null\"}\n");
     }
 }
 
