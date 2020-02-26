@@ -1475,6 +1475,17 @@ void dns_refused_packet(FILE *f, dns_pkt_t *packet, uint8_t *begin, size_t len, 
 
         fprintf(f, "\"resp_name\":\"null\",\"resp_type\":\"null\",\"data\":\"null\"}\n");
     }
+
+    if((dns_opcode)packet->head.header.rcode == DNS_RCODE_SERVFAIL) {
+        // we have servfail packet to work with
+        fprintf(f,
+            "{\"query_name\":\"%s\",\"query_type\":\"%s\",\"status\":\"SERVFAIL\",",
+            dns_name2str(&packet->head.question.name),
+            dns_record_type2str((dns_record_type) packet->head.question.type)
+        );
+
+        fprintf(f, "\"resp_name\":\"null\",\"resp_type\":\"null\",\"data\":\"null\"}\n");
+    }
 }
 
 void dns_print_packet(FILE *f, dns_pkt_t *packet, uint8_t *begin, size_t len, uint8_t *next)
