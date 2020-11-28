@@ -111,6 +111,17 @@ typedef enum
     OUTPUT_NDJSON
 } output_t;
 
+typedef enum {
+    FILTER_DISABLED = 0,
+    FILTER_POSITIVE,
+    FILTER_NEGATIVE
+} filter_mode_t;
+
+typedef struct {
+    const char *name;
+    const char *status_fmt;
+} status_format_map_t;
+
 const char *default_interfaces[] = {""};
 
 typedef struct
@@ -129,7 +140,6 @@ typedef struct
     struct
     {
         bool sections[4];
-
         bool match_name;
         bool ttl;
         bool separate_queries;
@@ -137,6 +147,7 @@ typedef struct
         bool include_meta;
         bool indent_sections;
         bool print_question;
+        bool write_exhausted_tries;
     } format;
 
     struct cmd_args
@@ -161,6 +172,8 @@ typedef struct
         output_t output;
         bool retry_codes[0xFFFF]; // Fast lookup map for DNS reply codes that are unacceptable and require a retry
         bool retry_codes_set;
+        bool filter_codes[0xFFFF];
+        filter_mode_t filter_mode;
         single_list_t bind_addrs4;
         single_list_t bind_addrs6;
         bool sticky;
@@ -188,7 +201,7 @@ typedef struct
     size_t finished;
     pid_t *pids;
     bool *done;
-
+    const char *status_fmt;
     FILE* outfile;
     FILE* logfile;
     FILE* domainfile;

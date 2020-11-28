@@ -1,16 +1,9 @@
-FROM ubuntu:16.04
-LABEL maintainer Aditya Gujar (@aditya_gujar)
+FROM alpine:edge
 
-RUN apt-get update
-
-RUN apt-get install -y libldns-dev git build-essential
-
-RUN apt-get install -y python
-
-RUN git clone https://github.com/blechschmidt/massdns.git
+RUN apk --update --no-cache --virtual .build-deps add git build-base \
+   && git clone --depth=1 https://github.com/blechschmidt/massdns.git \
+   && cd massdns && make && apk del .build-deps
 
 WORKDIR /massdns/
-
-RUN make
 
 ENTRYPOINT ["./bin/massdns"]
