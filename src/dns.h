@@ -1524,28 +1524,30 @@ bool dns_in_zone(dns_name_t *name, dns_name_t *zone)
 
 }
 
-void dns_refused_packet(FILE *f, dns_pkt_t *packet, uint8_t *begin, size_t len, uint8_t *next)
+void dns_refused_packet(FILE *f, dns_pkt_t *packet)
 {
     if((dns_opcode)packet->head.header.rcode == DNS_RCODE_REFUSED) {
         // we have refused packet to work with
         fprintf(f,
-            "{\"query_name\":\"%s\",\"query_type\":\"%s\",\"status\":\"REFUSED\",",
-            dns_name2str(&packet->head.question.name),
-            dns_record_type2str((dns_record_type) packet->head.question.type)
+            "{\"name\":\"%s\",\"type\":\"%s\",\"class\":\"%s\",\"status\":\"REFUSED\",\"data\":{\"answers\":[{",
+            dns_name2str(&packet.head.question.name),
+            dns_record_type2str((dns_record_type) packet.head.question.type),
+            dns_class2str((dns_class) packet.head.question.class)
         );
 
-        fprintf(f, "\"resp_name\":\"null\",\"resp_type\":\"null\",\"data\":\"null\"}\n");
+        fprintf(f, "\"ttl\":0,\"name\":\"null\",\"type\":\"null\",\"class\":\"null\",\"data\":\"null\"}]}\n");
     }
 
     if((dns_opcode)packet->head.header.rcode == DNS_RCODE_SERVFAIL) {
         // we have servfail packet to work with
         fprintf(f,
-            "{\"query_name\":\"%s\",\"query_type\":\"%s\",\"status\":\"SERVFAIL\",",
-            dns_name2str(&packet->head.question.name),
-            dns_record_type2str((dns_record_type) packet->head.question.type)
+            "{\"name\":\"%s\",\"type\":\"%s\",\"class\":\"%s\",\"status\":\"SERVFAIL\",\"data\":{\"answers\":[{",
+            dns_name2str(&packet.head.question.name),
+            dns_record_type2str((dns_record_type) packet.head.question.type),
+            dns_class2str((dns_class) packet.head.question.class)
         );
 
-        fprintf(f, "\"resp_name\":\"null\",\"resp_type\":\"null\",\"data\":\"null\"}\n");
+        fprintf(f, "\"ttl\":0,\"name\":\"null\",\"type\":\"null\",\"class\":\"null\",\"data\":\"null\"}]}\n");
     }
 }
 

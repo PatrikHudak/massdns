@@ -1044,7 +1044,7 @@ void do_read(uint8_t *offset, size_t len, struct sockaddr_storage *recvaddr)
         // We may have tried to many times already.
         if(!retry(lookup))
         {
-            write_exhausted_tries(lookup, "MAXRETRIES");
+            dns_refused_packet(context.outfile, &packet);
             // If this is the case, we will not try again.
             lookup_done(lookup);
         }
@@ -1141,9 +1141,6 @@ void do_read(uint8_t *offset, size_t len, struct sockaddr_storage *recvaddr)
                 }
                 fprintf(context.outfile, "%s},\"resolver\":\"%s\"}\n", section_emitted ? "]" : "",
                         sockaddr2str(recvaddr));
-
-                // print refused entry
-                dns_refused_packet(context.outfile, &packet, offset, len, next);
 
                 break;
 
