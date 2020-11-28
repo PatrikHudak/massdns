@@ -1535,8 +1535,10 @@ void dns_refused_packet(FILE *f, dns_pkt_t *packet)
             dns_class2str((dns_class) packet->head.question.class)
         );
 
-        fprintf(f, "\"ttl\":0,\"name\":\"null\",\"type\":\"null\",\"class\":\"null\",\"data\":\"null\"}]}}\n");
-    }
+        fprintf(f, 
+            "\"ttl\":0,\"name\":\"null\",\"type\":\"%s\",\"class\":\"null\",\"data\":\"null\"}]}}\n",
+            dns_record_type2str((dns_record_type) packet->head.question.type)
+        );    }
 
     if((dns_opcode)packet->head.header.rcode == DNS_RCODE_SERVFAIL) {
         // we have servfail packet to work with
@@ -1547,7 +1549,10 @@ void dns_refused_packet(FILE *f, dns_pkt_t *packet)
             dns_class2str((dns_class) packet->head.question.class)
         );
 
-        fprintf(f, "\"ttl\":0,\"name\":\"null\",\"type\":\"null\",\"class\":\"null\",\"data\":\"null\"}]}}\n");
+        fprintf(f, 
+            "\"ttl\":0,\"name\":\"null\",\"type\":\"%s\",\"class\":\"null\",\"data\":\"null\"}]}}\n",
+            dns_record_type2str((dns_record_type) packet->head.question.type)
+        );
     }
 }
 
